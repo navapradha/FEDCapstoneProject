@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--Header-->
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>test </title>
+
+    <!-- Bootstrap -->
+    <link href="../libs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="../libs/font-awesome/css/font-awesome.css" rel="stylesheet">
+
+    <!-- Custom Theme Style -->
+    <link href="../res/styles/custom.min.css" rel="stylesheet">
+</head>
+
+<!--Body-->
+<body class="nav-md">
+<div class="container body">
+    <div class="main_container">
+        <div class="col-md-3 left_col">
+            <div class="left_col scroll-view">
+                <!-- navBar Start-->
+                <div class="navbar nav_title" style="border: 0;">
+                    <a href="/playGround" class="site_title">
+                        <img src="../images/cart.png" style="height: 50px; width: 55px"> Online Star
+                    </a>
+                </div>
+                <div class="clearfix"></div>
+                <br />
+                <!--navbar end-->
+
+                <!-- sidebar menu -->
+                <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+                    <div class="menu_section">
+                        <!--<h3>General</h3>-->
+                        <ul class="nav side-menu">
+                            <li><a href=""><i class="fa fa-cubes"></i> Manage Products <span class="fa fa-chevron-down"></span></a>
+                            </li>
+                            <li><a><i class="fa fa-users"></i> Manage Users <span class="fa fa-chevron-down"></span></a>
+
+                            </li>
+                            <li><a><i class="fa fa-credit-card"></i> Manage Payments <span class="fa fa-chevron-down"></span></a>
+
+                            </li>
+                            <li><a><i class="fa fa-cogs"></i> Settings <span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+
+                                </ul>
+                            </li>
+                            <li><a><i class="fa fa-shopping-cart"></i> Manage Orders <span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+
+                                </ul>
+                            </li>
+
+                        </ul>
+                    </div>
+
+                </div>
+                <!--Side Bar end-->
+            </div>
+        </div>
+        <!-- top navigation -->
+        <div class="top_nav">
+            <div class="nav_menu">
+                <nav>
+                    <div class="nav toggle">
+                        <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+                    </div>
+                </nav>
+            </div>
+        </div>
+        <!-- /top navigation -->
+
+        <!-- page content -->
+        <div class="right_col" role="main">
+
+            <!-- Search Box-->
+            <div class="input-group">
+                <input type="text" id="searchText" class="form-control" placeholder="Search for..." ondragover="allowDrop(event)" ondrop="drop(event)">
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" type="button"><i class="fa fa-search"></i></button>
+                    </span>
+            </div>
+            <!-- Search box end-->
+
+            <!-- Category Filter Section -->
+
+                <!--Write your html contents here to Drop Categories-->
+
+            <!-- Category Filter Section End-->
+
+            <!--Show All Categories -->
+
+                <!--Write your html contents here to Drop Categories-->
+
+            <!--Show All Categories End -->
+
+            <!--Shows All Product -->
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="dashboard_graph">
+
+                        <div class="row x_title">
+                            <div class="col-md-6">
+                                <h3>Product List<small></small></h3>
+                                
+                            </div>
+                        </div>
+
+                           <div class="row" id="alert-banner">
+                            </div>
+                        <div class="col col-md-9 col-lg-9" id="product-list">
+                            
+                            </div>
+
+                            <!-- This is the column for Edit and delete Panel #DO NOT TOUCH -->
+                            <div class="col col-lg-3">
+                                <div class="panel panel-default">
+                                    <div class="col-md-12">
+                                        <div class="x_title" id="panel-header" style="font-size: 20px"><b>Add Product</b></div>
+                                       <div id="success-info"></div> 
+                                    </div>
+                                    <div class="panel-body">
+                                        <form id="add-products">
+                                            <div class="form">
+                                                <b>Name *</b>
+                                                <br>
+                                                <input class="form-control input-sm" type="text" id="product-name" />
+                                            </div>
+                                            <div class="form">
+                                                <b>Category *</b>
+                                                <br>
+                                                <input class="form-control input-sm" type="text" id="product_category" />
+                                            </div>
+                                            <div class="form">
+                                                <b>Price *</b>
+                                                <br>
+                                                <input class="form-control input-sm" type="number" id="product-price" />
+                                            </div>
+                                            <div class="form">
+                                                <b>Description *</b>
+                                                <br>
+                                                <textarea class="form-control input-sm" type="text" id="product-description" required></textarea>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="panel-header" align="center">
+                                        <button id="cancel-add" name="cancel" class="btn btn-danger">Cancel</button>
+                                        <button id="save-products" name="Submit" class="btn btn-success" onclick="createProduct('add-products')">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- End of all Products -->
+
+            <br />
+
+        </div>
+        <!-- /page content -->
+
+        <footer>
+            <div class="pull-right">
+            </div>
+            <div class="clearfix"></div>
+        </footer>
+        <!-- /footer content -->
+    </div>
+</div>
+
+<script src="../libs/jquery/dist/jquery.min.js"></script>
+<script src="../libs/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="../res/js/custom.js"></script>
+<script src="../res/scripts/index.js"></script>
+
+</body>
+</html>
+
+
+
