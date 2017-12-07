@@ -8,7 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>test </title>
+    <title>Capstone | </title>
 
     <!-- Bootstrap -->
     <link href="../libs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -92,7 +92,31 @@
 
             <!-- Category Filter Section -->
 
-                <!--Write your html contents here to Drop Categories-->
+                       <!-- Category Filter Section -->
+                <div class="panel">
+                    <div class="card">
+                        <div class="card-block dashboard_graph">
+                            <div class="panel-header pull-left">
+                                <h4>
+                                    <span class="fa fa-filter"></span> Category Filter</h4>
+                            </div>
+                            <div class="pull-right">
+                                <h6 class="pull-right clearfix">
+                                    <i>Drag and Drop some categories in this card to filter products</i>
+                                </h6>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                    <div id="dropped-categories" class="dashboard_graph" style="height:7em" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                </div>
+                <div class="panel dashboard_graph">
+                    <div class="panel-header ">
+                        <h4>All Categories</h4>
+                    </div>
+                    <div class="list-group list-group-horizontal" id="button-categories">
+                    </div>
+                </div>
 
             <!-- Category Filter Section End-->
 

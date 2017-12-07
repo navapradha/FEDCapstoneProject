@@ -12,6 +12,8 @@
 /*Global Variables Section*/
 var product_list;
 var productId;
+var product_filter = [];
+var initial_drop_id = "";
 
 //Declare your Global Variables inside this block
 
@@ -33,21 +35,42 @@ $(document).ready(function() {
      $(document).on("click", "button[id^='edit-product-']", function () {
         productId = this.id.substr(13);
         $("#panel-header").html("Edit Product");
-        $("#save-products").replaceWith("<button id='update-product' name='success' class='btn btn-success'>Update</button>");
+        $("#save-products").replaceWith("<button id='update-form' name='success' class='btn btn-success'>Update</button>");
         $.each(product_list, function (key, element) {
             if (element._id == productId) {
+                alert(element._id);
+                alert(productId);
                 $("#product-name").val(element.name);
                 $("#product-price").val(element.price);
-                $("#product-category").val(element.category);
+                $("#product_category").val(element.category);
                 $("#product-description").val(element.description);
             }
         });
 
         $(document).on("click", "#update-form", function () {
-           
+           alert("inside edit");
                 editProduct(productId);
             
         });
+    });
+
+      $(document).on("click", "i[id^='close-']", function () {
+        var category = this.id.substr(6);
+        $("#drop-" + category).remove();
+        $("#close-" + category).remove();
+        initial_drop_id = "";
+
+        product_filter = product_filter.filter(function (value) {
+            return value != category;
+        });
+
+        filterProducts();
+    });
+
+      $(document).on("click", "button[id^='upload-']", function () {
+          alert("test image");
+        upload_id = this.id.substr(7);
+        uploadImage(upload_id, image_file);
     });
 
 });
@@ -77,6 +100,10 @@ function getProducts() {
 alert("test");
     $("#button-categories").empty();
     $("#product-list").empty();
+     $('#clear-form').click();
+    $("#dropped-categories").empty();
+    $("#searchText").val('');
+     product_filter = [];
 
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
@@ -96,11 +123,11 @@ alert("test");
                     product_list = item;
                     $.each(item, function (key, value) {
                         //Right Code to update in the Product Template
-                        product_template += "<div class='col-md-12 panel panel-default'>"
-                            + "<div class='col-lg-3 col-md-3'><div>"
+                        product_template += "<div class='col-lg-12 panel panel-default dashboard_graph' id = 'test-filter'>"
+                        + "<div class='col-lg-3'><div>"
                             + "<img id='image-div-" + value._id + "' src=" + value.productImg.filePath.substr(9) + " style='width:100%'></div>"
                             + "<div id='upload'><button class='btn btn-link' style='padding-left: 45%' id='upload-" + value._id + "'>"
-                            + "<span class='fa fa-upload' onclick='uploadImage()'> Upload</button></div></div>"
+                            + "<span class='fa fa-upload'> Upload</button></div></div>"
                             + "<div id='" + value.category + "-" + value._id + "' class='col-lg-9 col-md-9'>"
                             + "<h4>" + value.name + "</h4>"
                             + "<p>" + value.description + "</p>"
@@ -262,8 +289,26 @@ function removeProduct(id) {
 
 /*Update Product*/
 function editProduct(id) {
-
-    //write your code here to update the product and call when update button clicked
+  alert("inside edit");
+        $.ajax({
+        url: "product/" + id,
+        type: 'PUT',
+        dataType: 'json',
+        data: validateProductDetails(),
+        success: function (data, status, jqXmlHttpRequest) {
+            console.log("Status: ", status);
+            alert(status);
+        },
+        complete: function (data) {
+            $('#alert-banner-form').empty();
+            $("#alert-banner-form").html('<div class="alert alert-success alert-dismissable fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>Updated Successfully</div>');
+            
+            $('#alert-banner-form').slideUp(1000, function () {
+                $(this).empty().show();
+            });
+            getProducts();
+        }
+    });
 
 }
 
@@ -284,58 +329,99 @@ function createProduct() {
 }
 
 
-/* 
-    //Code Block for Drag and Drop Filter
-
-    //Write your code here for making the Category List
-    Using jQuery
-    From the products list, create a list of unique categories
-    Display each category as an individual button, dynamically creating the required HTML Code
-
+function allowDrop(ev) {
     
-    //Write your code here for filtering the products list on Drop 
-    Using jQuery
-    Show the category button with a font-awesome times icon to its right in the filter list
-    A category should appear only once in the filter list
-    Filter the products list with, products belonging to the selected categories only
-
-
-    //Write your code to remove a category from the filter list
-    Using jQuery
-    When the user clicks on the x icon
-    Remove the category button from the filter list
-    Filter the products list with, products belonging to the selected categories only
-
- */
-
-
-
-
-
-//Code block for Image Upload
-
-function uploadImage(){
-     $("#my_file").click();
+    ev.preventDefault();
 }
 
-/*
-    //Write your Code here for the Image Upload Feature
-    Make the product image clickable in the getProducts() method.
-    When the user clicks on the product image
-    Open the file selector window
-    Display the selected image as a preview in the product tile
-    
-    //Image Upload
-    When the user clicks Upload
-    Using AJAX
-    Update the product image using the following api call
-        Call the api
-            http://localhost:3000/product/id/ProductImg
-            method=PUT
-            the data for this call should be as FormData
-            eg:
-            var formData = new FormData();
-            formData.append('file', file, file.name);
-    
-    Refresh the products list to show the new image
- */
+function drag(ev) {
+    ev.dataTransfer.setData("text", ev.target.id);
+}
+
+function drop(ev) {
+    alert("inside");
+    ev.preventDefault();
+    $("#searchText").val('');
+    var data = ev.dataTransfer.getData("text");
+    alert(data);
+    if (initial_drop_id != data) {
+        alert("inside if");
+        initial_drop_id = data;
+        var categoryName = $('#' + data).val();
+        alert(categoryName);
+        product_filter.push(categoryName);
+
+        var button_element = document.createElement('button');
+        button_element.type = "button";
+        button_element.value = categoryName;
+        button_element.className = "btn btn-success";
+        button_element.innerHTML = categoryName;
+        button_element.id = "drop-" + categoryName;
+
+        var spanElement = document.createElement('i');
+        spanElement.className = "fa fa-times-circle";
+        spanElement.id = "close-" + categoryName;
+        spanElement.style.color = "#a50b0b";
+        spanElement.setAttribute("aria-hidden", "true");
+        spanElement.appendChild(document.createTextNode("     "))
+
+        ev.target.appendChild(button_element);
+        ev.target.appendChild(spanElement);
+
+        filterProducts();
+
+    }
+
+}
+
+
+function filterProducts() {
+    $.each(product_filter, function (i, category_name) {
+
+        $("#product-list #test-filter").each(function (key, productListDiv) {
+            if ($(productListDiv).text().search(category_name) < 0) {
+                $(productListDiv).hide();
+            }
+        });
+    });
+
+    $.each(product_filter, function (i, category_name) {
+        $("#product-list #test-filter").each(function (key, productListDiv) {
+            if ($(productListDiv).text().search(category_name) > 0) {
+                $(productListDiv).show();
+            }
+        });
+    });
+
+    if (product_filter.length == 0) {
+        $("#product-list #test-filter").show();
+    }
+}
+
+
+
+
+
+function uploadImage(id, file) {
+    alert("test img");
+    var formData = new FormData();
+    formData.append('file', file);
+    console.log(formData.get);
+    $.ajax({
+        url: "product/" + id + "/ProductImg",
+        type: 'PUT',
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function (data, status, jqXmlHttpRequest) {
+            $('#alert-banner').empty();
+            $("#alert-banner").html('<div class="alert alert-success alert-dismissable fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>Image Uploaded Successfully</div>');
+
+            $('#alert-banner').slideUp(1000, function () {
+                $(this).empty().show();
+            });
+
+            getProducts();
+        }
+    });
+}
